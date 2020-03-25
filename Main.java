@@ -239,10 +239,15 @@ public class Main{
     return gs.BFTRec(graph);
   }
 
+  static ArrayList<Node> BFTIterLinkedList(final Graph graph){
+    GraphSearch gs = new GraphSearch();
+    return gs.BFTIter(graph);
+  }
+
+  //main method to test
   public static void main(String[] args){
     Graph g = createLinkedList(10000);
-    //ArrayList<Node> check = BFTRecLinkedList(g);
-    //System.out.println(check.size());
+    ArrayList<Node> check = BFTIterLinkedList(g);
   }
 
 }
