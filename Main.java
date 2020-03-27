@@ -69,8 +69,10 @@ class GraphSearch{
       return true;
     }
 
+    //loops through edges and checks
     boolean end = false;
     for(Node node: check.edges){
+      //ends search once goal node is found
       if(end){
         return true;
       }
@@ -85,6 +87,7 @@ class GraphSearch{
   ArrayList<Node> DFSRec(final Node start, final Node end){
     HashSet<Node> visited = new HashSet<Node>();
     ArrayList<Node> ret = new ArrayList<Node>();
+
     boolean check = DFSRecHelper(visited, ret, start, end);
     if(check)
       return ret;
@@ -197,27 +200,38 @@ public class Main{
     }
 
     List<Node> list = new ArrayList<Node>(g.getAllNodes());
-    int numNodes, randNode;
-    String randString;
     Random rand = new Random();
+    Node check1, check2;
 
+    //loops through nodes, O(nlogn)
     int k;
-    for(i = 0; i < list.size(); i++){
+    for(i = 0; i < n-1; i++){
+      check1 = list.get(i);
+
+      for(k = i+1; k < n; k++){
+
+        //50% attaching nodes
+        if(rand.nextBoolean()){
+          check2 = list.get(k);
+          g.addUndirectedEdge(check1, check2);
+        }
+      }
+    }
+
+
+      /*
       Node node = list.get(i);
 
       //adds random amount of edges to random nodes for each node
-      numNodes = rand.nextInt(n-i) + i; // i to n-i-1
+      numNodes = rand.nextInt(n-i); // 0 to n-i-1
       for(k = 0; k < numNodes; k++){
 
         //ensures no node connects to themselves
-        randNode = rand.nextInt(n); // 0 to n-1
-        while(randNode == i)
-          randNode = rand.nextInt(n);
-
+        randNode = rand.nextInt(n-i-1) + i + 1; // i+1 to n-1
         g.addUndirectedEdge(node, list.get(randNode));
       }
 
-    }
+    }*/
 
     return g;
   }
