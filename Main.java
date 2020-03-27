@@ -9,10 +9,10 @@ import java.util.LinkedList;
 
 //represents a position in the maze
 class Node{
-  String nodeVal;
+  int nodeVal;
   HashSet<Node> edges;
 
-  public Node(String nodeVal){
+  public Node(int nodeVal){
     this.nodeVal = nodeVal;
     edges = new HashSet<Node>();
   }
@@ -20,18 +20,23 @@ class Node{
 
 //graph class to represent a maze
 class Graph{
-  HashSet<Node> nodes;
+  HashSet<Node> setNodes;
+  ArrayList<Node> listNodes;
 
   public Graph(){
-    nodes = new HashSet<Node>();
+    setNodes = new HashSet<Node>();
+    listNodes = new ArrayList<Node>();
   }
 
-  void addNode(final String nodeVal){
-    nodes.add(new Node(nodeVal));
+  void addNode(final int nodeVal){
+    Node add = new Node(nodeVal);
+    setNodes.add(add);
+    listNodes.add(add);
   }
 
-  void addDirectedEdge(final Node first, final Node second){
-    first.edges.add(second);
+  void addMadeNode(final Node node){
+    setNodes.add(node);
+    listNodes.add(node);
   }
 
   void addUndirectedEdge(final Node first, final Node second){
@@ -45,21 +50,24 @@ class Graph{
   }
 
   HashSet<Node> getAllNodes(){
-    return nodes;
+    return setNodes;
+  }
+
+  ArrayList<Node> getArrayNodes(){
+    return listNodes;
   }
 }
 
 
 class GraphSearch{
 
-  static boolean DFSRecHelper(HashSet<Node> visited, final Node check, final Node goal){
+  static boolean DFSRecHelper(HashSet<Node> visited, ArrayList<Node> ret, final Node check, final Node goal){
     visited.add(check);
+    ret.add(check);
 
     if(check == goal){
       return true;
     }
-
-
 
     boolean end = false;
     for(Node node: check.edges){
@@ -67,7 +75,7 @@ class GraphSearch{
         return true;
       }
       if(!visited.contains(node)){
-        end = DFSRecHelper(visited, node, goal);
+        end = DFSRecHelper(visited, ret, node, goal);
       }
     }
 
@@ -76,9 +84,10 @@ class GraphSearch{
 
   ArrayList<Node> DFSRec(final Node start, final Node end){
     HashSet<Node> visited = new HashSet<Node>();
-    boolean check = DFSRecHelper(visited, start, end);
+    ArrayList<Node> ret = new ArrayList<Node>();
+    boolean check = DFSRecHelper(visited, ret, start, end);
     if(check)
-      return new ArrayList<Node>(visited);
+      return ret;
     return null;
   }
 
@@ -133,7 +142,7 @@ class GraphSearch{
 
     //checks every node, including un-attached ones
     Node curr;
-    for(Node node: graph.nodes){
+    for(Node node: graph.setNodes){
       if(!visited.contains(node)){
         visited.add(node);
         q.add(node);
@@ -151,7 +160,7 @@ class GraphSearch{
     ArrayList<Node> ret = new ArrayList<Node>();
 
     Node curr;
-    for(Node node: graph.nodes){
+    for(Node node: graph.setNodes){
       if(!visited.contains(node)){
         visited.add(node);
         q.add(node);
@@ -175,8 +184,6 @@ class GraphSearch{
 
 }
 
-
-
 //main class to test methods
 public class Main{
 
@@ -186,7 +193,7 @@ public class Main{
     //adds nodes to graph
     int i;
     for(i = 0; i < n; i++){
-      g.addNode(Integer.toString(i));
+      g.addNode(i);
     }
 
     List<Node> list = new ArrayList<Node>(g.getAllNodes());
@@ -199,15 +206,17 @@ public class Main{
       Node node = list.get(i);
 
       //adds random amount of edges to random nodes for each node
-      numNodes = rand.nextInt(n-1) + 1;
+      numNodes = rand.nextInt(n-i) + i; // i to n-i-1
       for(k = 0; k < numNodes; k++){
-        randNode = rand.nextInt(n);
-        if(randNode == i)
-          k--;
-        else{
-          g.addUndirectedEdge(node, list.get(randNode));
-        }
+
+        //ensures no node connects to themselves
+        randNode = rand.nextInt(n); // 0 to n-1
+        while(randNode == i)
+          randNode = rand.nextInt(n);
+
+        g.addUndirectedEdge(node, list.get(randNode));
       }
+
     }
 
     return g;
@@ -219,7 +228,7 @@ public class Main{
     //adds nodes to graph
     int i;
     for(i = 0; i < n; i++){
-      g.addNode(Integer.toString(i));
+      g.addNode(i);
     }
 
     //adds directed edges to create linked list
@@ -228,7 +237,7 @@ public class Main{
     for(i = 0; i < list.size()-1; i++){
       Node node1 = list.get(i);
       Node node2 = list.get(i+1);
-      g.addDirectedEdge(node1, node2);
+      g.addUndirectedEdge(node1, node2);
     }
 
     return g;
@@ -244,10 +253,14 @@ public class Main{
     return gs.BFTIter(graph);
   }
 
-  //main method to test
+  //--------------------------------------------------------------------------
+  //MAIN METHOD
+  //--------------------------------------------------------------------------
+
   public static void main(String[] args){
-    Graph g = createLinkedList(10000);
-    ArrayList<Node> check = BFTIterLinkedList(g);
+    Graph g = createLinkedList(100);
+    ArrayList<Node> traverse1 = BFTRecLinkedList(g);
+    ArrayList<Node> traverse2 = BFTIterLinkedList(g);
   }
 
 }
