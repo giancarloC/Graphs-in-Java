@@ -100,21 +100,22 @@ class GraphSearch{
     ArrayList<Node> ret = new ArrayList<Node>();
 
     s.push(start);
-    visited.add(start);
     Node check;
 
     while(s.size() > 0){
       check = s.peek();
       s.pop();
-      ret.add(check);
-      if(check == end){
-        return ret;
-      }
 
-      for(Node node: check.edges){
-        if(!visited.contains(node)){
-          visited.add(node);
-          s.push(node);
+      if(!visited.contains(check)){
+        visited.add(check);
+        ret.add(check);
+        if(check == end){
+          return ret;
+        }
+
+        for(Node node: check.edges){
+          if(!visited.contains(node))
+            s.push(node);
         }
       }
     }
@@ -257,14 +258,16 @@ public class Main{
     return g;
   }
 
-  static ArrayList<Node> BFTRecLinkedList(final Graph graph){
+  static ArrayList<Node> BFTRecLinkedList(){
     GraphSearch gs = new GraphSearch();
-    return gs.BFTRec(graph);
+    Graph g = createLinkedList(100);
+    return gs.BFTRec(g);
   }
 
-  static ArrayList<Node> BFTIterLinkedList(final Graph graph){
+  static ArrayList<Node> BFTIterLinkedList(){
     GraphSearch gs = new GraphSearch();
-    return gs.BFTIter(graph);
+    Graph g = createLinkedList(10000);
+    return gs.BFTIter(g);
   }
 
   //--------------------------------------------------------------------------
@@ -272,9 +275,8 @@ public class Main{
   //--------------------------------------------------------------------------
 
   public static void main(String[] args){
-    Graph g = createLinkedList(100);
-    ArrayList<Node> traverse1 = BFTRecLinkedList(g);
-    ArrayList<Node> traverse2 = BFTIterLinkedList(g);
+    BFTRecLinkedList();
+    BFTIterLinkedList();
   }
 
 }
