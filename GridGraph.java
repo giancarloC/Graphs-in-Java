@@ -13,13 +13,14 @@ public class GridGraph{
     int x2 = second.getX();
     int y2 = second.getY();
 
+    //the distance between two points. If they are next to each other, it should be 1
     double distance = Math.sqrt(Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2));
     if(distance == 1)
       return true;
     return false;
   }
 
-  void addGridNode(final int x, final int y, final String nodeVal){
+  void addGridNode(final int x, final int y, final int nodeVal){
     GridNode node = new GridNode(x, y, nodeVal);
     nodes.add(node);
   }

@@ -2,10 +2,10 @@ import java.util.*;
 
 public class GridNode{
   private int x, y;
-  String nodeVal;
+  int nodeVal;
   HashSet<GridNode> neighbors;
 
-  public GridNode(int x, int y, String nodeVal){
+  public GridNode(int x, int y, int nodeVal){
     this.x = x;
     this.y = y;
     this.nodeVal = nodeVal;

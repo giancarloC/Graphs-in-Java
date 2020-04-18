@@ -9,7 +9,7 @@ public class Main{
     //adds nodes to graph
     int i;
     for(i = 0; i < n; i++){
-      g.addNode(Integer.toString(i));
+      g.addNode(i);
     }
 
     List<Node> list = new ArrayList<Node>(g.getAllNodes());
@@ -17,15 +17,15 @@ public class Main{
     Node check1, check2;
 
     //loops through nodes, O(nlogn)
-    int k;
+    int i2;
     for(i = 0; i < n-1; i++){
       check1 = list.get(i);
 
-      for(k = i+1; k < n; k++){
+      for(i2 = i+1; i2 < n; i2++){
 
         //50% attaching nodes
         if(rand.nextBoolean()){
-          check2 = list.get(k);
+          check2 = list.get(i2);
           g.addUndirectedEdge(check1, check2);
         }
       }
@@ -40,7 +40,7 @@ public class Main{
     //adds nodes to graph
     int i;
     for(i = 0; i < n; i++){
-      g.addNode(Integer.toString(i));
+      g.addNode(i);
     }
 
     //adds directed edges to create linked list
@@ -72,7 +72,7 @@ public class Main{
 
     int i;
     for(i = 0; i < n; i++){
-      g.addNode(Integer.toString(i));
+      g.addNode(i);
     }
 
     List<Node> list = new ArrayList<Node>(g.getAllNodes());
@@ -80,15 +80,15 @@ public class Main{
     Node check1, check2;
 
     //loops through nodes, O(nlogn)
-    int k;
+    int i2;
     for(i = 0; i < n-1; i++){
       check1 = list.get(i);
 
-      for(k = i+1; k < n; k++){
+      for(i2 = i+1; i2 < n; i2++){
 
         //50% attaching nodes
         if(rand.nextBoolean()){
-          check2 = list.get(k);
+          check2 = list.get(i2);
           g.addDirectedEdge(check1, check2);
         }
       }
@@ -102,21 +102,21 @@ public class Main{
 
     int i;
     for(i = 0; i < n; i++){
-      w.addNode(Integer.toString(i));
+      w.addNode(i);
     }
 
     List<WNode> nodes = new ArrayList<WNode>(w.getAllNodes());
     int numNodes = nodes.size();
-    int k, randNum;
+    int i2, randNum;
     Random rand = new Random();
     WNode node1, node2;
     for(i = 0; i < numNodes; i++){
       node1 = nodes.get(i);
 
       //adds edge to every other node
-      for(k = 0; k < numNodes; k++){
-        if(i != k){
-          node2 = nodes.get(k);
+      for(i2 = 0; i2 < numNodes; i2++){
+        if(i != i2){
+          node2 = nodes.get(i2);
           randNum = rand.nextInt() & Integer.MAX_VALUE; //grabs random positive int
           w.addWeightedEdge(node1, node2, randNum);
         }
@@ -132,12 +132,11 @@ public class Main{
 
     int i;
     for(i = 0; i < n; i++){
-      w.addNode(Integer.toString(i));
+      w.addNode(i);
     }
 
     List<WNode> nodes = new ArrayList<WNode>(w.getAllNodes());
     int numNodes = nodes.size();
-    int k;
     WNode node1, node2;
     for(i = 0; i < numNodes-1; i++){
       node1 = nodes.get(i);
@@ -171,13 +170,16 @@ public class Main{
         //adds distance if not updated
         newDistance = (Integer) entry.getValue() + currDistance;
         if(!distances.containsKey(node)){
+          //places distance in the map
           distances.put(node, newDistance);
         }
 
         //updates distance if new distance is smaller
         else{
+          //grabs distance from map
           oldDistance = distances.get(node);
           if(newDistance < oldDistance)
+            //replaces distance in map if new distance is smaller
             distances.replace(node, newDistance);
         }
       }
@@ -203,10 +205,10 @@ public class Main{
   static GridGraph createRandomGridGraph(int n){
     GridGraph g = new GridGraph();
 
-    int i, j;
+    int i, j, nodeNum = 0;
     for(i = 0; i < n+1; i++){
       for(j = 0; j < n+1; j++){
-        g.addGridNode(i, j, Integer.toString(i) + Integer.toString(j));
+        g.addGridNode(i, j, nodeNum++);
       }
     }
 
@@ -317,14 +319,9 @@ public class Main{
     backwards.add(sourceNode);
 
     //reverses array
-    int i;
-    int size = backwards.size();
-    ArrayList<GridNode> ret = new ArrayList<>();
-    for(i = 0; i < size; i++){
-      ret.add(i, backwards.get(size-i-1));
-    }
+    Collections.reverse(backwards);
 
-    return ret;
+    return backwards;
   }
 
   //--------------------------------------------------------------------------
@@ -342,7 +339,10 @@ public class Main{
     ArrayList<Node> r2 = t.mDFS(createRandomDAGIter(1000));
 
     //random grid graph
+
+
     GridGraph g = createRandomGridGraph(100);
+    HashSet<GridNode> check;
     HashSet<GridNode> h = g.getAllNodes();
     GridNode sourceNode = null;
     GridNode destNode = null;

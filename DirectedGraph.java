@@ -8,7 +8,7 @@ class DirectedGraph{
     setNodes = new HashSet<Node>();
   }
 
-  void addNode(final String nodeVal){
+  void addNode(final int nodeVal){
     Node add = new Node(nodeVal);
     setNodes.add(add);
   }

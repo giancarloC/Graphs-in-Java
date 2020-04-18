@@ -8,7 +8,7 @@ class WeightedGraph{
     setNodes = new HashSet<WNode>();
   }
 
-  void addNode(final String nodeVal){
+  void addNode(final int nodeVal){
     WNode add = new WNode(nodeVal);
     setNodes.add(add);
   }
